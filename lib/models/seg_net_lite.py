@@ -32,11 +32,6 @@ class SegNetLite(nn.Module):
         self.num_up_layers = len(kernel_sizes)
 
         input_size = 3 # initial number of input channels
-        # Construct downsampling layers.
-        # As mentioned in the assignment, blocks of the downsampling path should have the
-        # following output dimension (igoring batch dimension):
-        # 3 x 64 x 64 (input) -> 32 x 32 x 32 -> 64 x 16 x 16 -> 128 x 8 x 8 -> 256 x 4 x 4
-        # each block should consist of: Conv2d->BatchNorm2d->ReLU->MaxPool2d
         layers_conv_down = []
         layers_bn_down = []
         layers_pooling = []
@@ -52,10 +47,6 @@ class SegNetLite(nn.Module):
         self.layers_bn_down = nn.ModuleList(layers_bn_down)
         self.layers_pooling = nn.ModuleList(layers_pooling)
 
-        # Construct upsampling layers
-        # As mentioned in the assignment, blocks of the upsampling path should have the
-        # following output dimension (igoring batch dimension):
-        # 256 x 4 x 4 (input) -> 128 x 8 x 8 -> 64 x 16 x 16 -> 32 x 32 x 32 -> 32 x 64 x 64
         # each block should consist of: MaxUnpool2d->Conv2d->BatchNorm2d->ReLU
         layers_conv_up = []
         layers_bn_up = []
@@ -74,8 +65,6 @@ class SegNetLite(nn.Module):
         
 
         self.relu = nn.ReLU(True)
-
-        # Implement a final 1x1 convolution to to get the logits of 11 classes (background + 10 digits)
 
         self.conv_final = nn.Conv2d(input_size, 11, 1, padding=0)
 
